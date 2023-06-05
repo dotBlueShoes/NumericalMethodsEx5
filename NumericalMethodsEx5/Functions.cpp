@@ -1,20 +1,22 @@
 #include "Functions.hpp"
 
+
 double Examples::Function1(const double& x) {
-	double result = sqrt(x * x + 1); 
+	double result = 4 * x + 1;
 	return result;
 }
 
 double Examples::Function2(const double& x) {
-	double values[] { 2, 1, -2 };
+	double values[] { 4, 0, -2 };
 	double result = CalculateHorner(x, values, 3);
 	return result;
 }
 
 double Examples::Function3(const double& x) {
-	double result = 4 * x + 1;
+	double result = abs(x);
 	return result;
 }
+
 
 double Examples::Function4(const double& x) {
 	double result = sin(x);
@@ -22,7 +24,7 @@ double Examples::Function4(const double& x) {
 }
 
 double Examples::Function5(const double& x) {
-	double result = cos(2 * x * x + 1); // 2x^2 + 1
+	double result = cos(2 * x + 1); // 2x + 1
 	return result;
 }
 

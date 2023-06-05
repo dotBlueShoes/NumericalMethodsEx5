@@ -9,6 +9,7 @@
 #include "Hermite.hpp"
 
 #define STRING_SEPERATOR		 "-----------------------------------\n"
+#define STRING_SELECT_ACCURACY	 "Enter accuracy: "
 #define STRING_SELECT_FUNCTION	 "\nChoose function:\n"
 #define STRING_SELECT_AREA_BEGIN "Enter range START: "
 #define STRING_SELECT_AREA_END	 "Enter range END: "
@@ -28,15 +29,17 @@ int main() {
 		double begin, end;
 
 		std::cout << STRING_SELECT_FUNCTION
-			"\t[0] |x|\n"
-			"\t[1] 2x^2 + x - 2\n"
-			"\t[2] 4x+1\n"
+			"\t[0] 4x+1\n"
+			"\t[1] 4x^2 + x - 2\n"
+			"\t[2] |x|\n"
 			"\t[3] sin(x)\n"
-			"\t[4] cos(2x^2+1)\n"
+			"\t[4] cos(2x+1)\n"
 			"Option: ";
 
 		std::cin >> chosenFunction;
-		std::cout << "\n" STRING_SEPERATOR STRING_SELECT_AREA_BEGIN;
+		std::cout << "\n" STRING_SEPERATOR STRING_SELECT_ACCURACY;
+		std::cin >> accuracy;
+		std::cout << STRING_SELECT_AREA_BEGIN;
 		std::cin >> begin;
 		std::cout << STRING_SELECT_AREA_END;
 		std::cin >> end;
@@ -45,6 +48,7 @@ int main() {
 		std::cout << STRING_SELECT_POLY_POWER;
 		std::cin >> level;
 		std::cout << '\n' << std::endl;
+		
 
 		{ // CALCULATING
 
@@ -70,11 +74,13 @@ int main() {
 			double diff = (abs(begin - end) / (howManyNodes - 1));
 
 			for (double i = begin; i <= end; i += diff) {
-				epsilon += (functionPtr(i) - hermite.Approximation(values, functions, chosenFunction, i, level))
-					* (functionPtr(i) - hermite.Approximation(values, functions, chosenFunction, i, level));
+				double part = functionPtr(i) - hermite.Approximation(values, functions, chosenFunction, i, level);
+				double result = part * part;
+				epsilon += result;
+				std::cout << "r: " << result << std::endl;
 			}
 
-			std::cout << epsilon << std::endl;
+			std::cout << sqrt(epsilon) << std::endl;
 
 			{ // PLOTTING
 				Gnuplot plot;
@@ -93,8 +99,8 @@ int main() {
 				plot.set_grid();
 				plot.set_xrange(-2, 2);
 				plot.set_style("lines");
-				plot.plot_xy(baseX, baseY, "Base");
-				plot.plot_xy(resultX, resultY, "Result");
+				plot.plot_xy(baseX, baseY, "Function");
+				plot.plot_xy(resultX, resultY, "Approximation");
 			}
 
 		}

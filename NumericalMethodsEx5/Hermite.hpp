@@ -11,7 +11,7 @@
 
 #define STRING_HERMITE_NODES "Number of nodes for integral? [ 2 / 3 / 4 / 5 ]\n" "Option: "
 
-const double accuracy = 0.00001;
+extern double accuracy;
 
 struct Values {
 	double node, weight;
@@ -24,6 +24,7 @@ private:
 	int nodeCount;
 public:
 	double Approximation(PolynomialValues, Examples::Function*, const int&, const double&, const int&);
+	double Calculate_Intepolation(PolynomialValues, Examples::Function*, const int&);
 	double Calculate(PolynomialValues, Examples::Function*, const int&, const int&);
 	void GetArray(PolynomialValues);
 	void GetPolynomials(double[8][8]);

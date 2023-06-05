@@ -1,9 +1,24 @@
 #include "Hermite.hpp"
 
+double accuracy = 0.00001;
+
 Hermite::Hermite() {
 	std::cout << STRING_HERMITE_NODES;
 	std::cin >> nodeCount;
 	std::cout << std::endl;
+}
+
+double Hermite::Calculate_Intepolation(PolynomialValues arr, Examples::Function* functions, const int& function) {
+
+	Examples::Function functionPtr = functions[function];
+
+	double result = 0, multiplier;
+	for (int i = 0; i < 5; i++)
+		if (arr[nodeCount - 2][i].weight != 0) {
+			multiplier = arr[nodeCount - 2][i].weight * functionPtr(arr[nodeCount - 2][i].node);
+			result += multiplier;
+		}
+	return result;
 }
 
 double Hermite::Calculate(PolynomialValues values, Examples::Function* functions, const int& function, const int& number) {
@@ -14,9 +29,9 @@ double Hermite::Calculate(PolynomialValues values, Examples::Function* functions
 	for (int i = 0; i < 5; i++)
 		if (values[nodeCount - 2][i].weight != 0) {
 			multiplier =
-				values[nodeCount - 2][i].weight
-				*functionPtr(values[nodeCount - 2][i].node)
-				*HermitePolynomial(number, values[nodeCount - 2][i].node);
+				values[nodeCount - 2][i].weight * 
+				functionPtr(values[nodeCount - 2][i].node) * 
+				HermitePolynomial(number, values[nodeCount - 2][i].node);
 			result += multiplier;
 		}
 
@@ -135,9 +150,9 @@ std::string Hermite::GetFinalPolynomial(PolynomialValues values, Examples::Funct
 
 	for (int i = 0; i <= iter; i++) {
 		double a = Calculate(values, functions, function, i);
-		for (int j = 0; j <= 7; j++) {
-			arrH[i][j] = arrH[i][j] * a;
-			arrFinal[j] += arrH[i][j];
+		for (int j = 0; j < 8; j++) {
+			//arrH[i][j] *= a;
+			arrFinal[j] += arrH[i][j] * a;
 		}
 	}
 
@@ -155,8 +170,7 @@ std::string Hermite::GetFinalPolynomial(PolynomialValues values, Examples::Funct
 			else if (i == 1) {
 				result.append(std::to_string(arrFinal[i]));
 				result.append("x");
-			}
-			else {
+			} else {
 				result.append(std::to_string(arrFinal[i]));
 				result.append("x^");
 				result.append(std::to_string(i));
