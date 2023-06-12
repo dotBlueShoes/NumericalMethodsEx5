@@ -67,20 +67,21 @@ int main() {
 			hermite.GetArray(values);
 
 			std::cout << STRING_CALCULATED_POLY <<
-				hermite.GetFinalPolynomial(values, functions, chosenFunction, level) <<
-				'\n' << STRING_APPROXIMATION_ERR;
+				hermite.GetFinalPolynomial(values, functions, chosenFunction, level) << '\n';
 
-			double epsilon = 0;
-			double diff = (abs(begin - end) / (howManyNodes - 1));
+			{ // ERROR CALC
+				double epsilon = 0;
+				double diff = (abs(begin - end) / (howManyNodes - 1));
 
-			for (double i = begin; i <= end; i += diff) {
-				double part = functionPtr(i) - hermite.Approximation(values, functions, chosenFunction, i, level);
-				double result = part * part;
-				epsilon += result;
-				std::cout << "r: " << result << std::endl;
+				for (double i = begin; i <= end; i += diff) {
+					double part = functionPtr(i) - hermite.Approximation(values, functions, chosenFunction, i, level);
+					double result = part * part;
+					epsilon += result;
+					//std::cout << "r: " << result << std::endl;
+				}
+			
+				std::cout << STRING_APPROXIMATION_ERR << sqrt(epsilon) << std::endl;
 			}
-
-			std::cout << sqrt(epsilon) << std::endl;
 
 			{ // PLOTTING
 				Gnuplot plot;
